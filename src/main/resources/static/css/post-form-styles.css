@@ -1,0 +1,28 @@
+form {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+form label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+form input, form textarea {
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+form textarea {
+  resize: vertical;
+  min-height: 150px;
+}
+
+form button {
+  margin-top: 10px;
+}

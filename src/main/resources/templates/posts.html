@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8">
+    <title>Лента постов</title>
+    <link rel="stylesheet" href="/static/css/posts-styles.css">
+  </head>
+  <body>
+    <div class="container mt-4">
+      <h1>Лента постов</h1>
+
+      <!-- Форма добавления нового поста -->
+      <button class="btn btn-primary mb-3" onclick="window.location.href='/posts/new'">Добавить пост</button>
+
+      <!-- Фильтрация по тегам -->
+      <div class="mb-3">
+        <label for="tagFilter" class="form-label">Фильтр по тегам:</label>
+        <input type="text" id="tagFilter" class="form-control" placeholder="Введите тег">
+      </div>
+
+      <!-- Пагинация -->
+      <div class="mb-3">
+        <label for="pageSize" class="form-label">Постов на странице:</label>
+        <select id="pageSize" class="form-select">
+          <option value="10">10</option>
+          <option value="20">20</option>
+          <option value="50">50</option>
+        </select>
+      </div>
+
+      <!-- Список постов -->
+      <div th:each="post : ${posts}" class="card mb-3">
+        <img th:src="${post.imageUrl}" class="card-img-top" alt="Изображение поста">
+        <div class="card-body">
+          <h5 class="card-title">
+            <a th:href="@{/posts/{id}(id=${post.id})}" th:text="${post.title}"></a>
+          </h5>
+          <p class="card-text" th:text="${#strings.substring(post.content, 0, 100) + '...'}"></p>
+          <p class="card-text">
+            <small class="text-muted">
+              Теги: <span th:text="${post.tags}"></span> |
+              Лайки: <span th:text="${post.likes}"></span> |
+              Комментарии: <span th:text="${post.comments.size()}"></span>
+            </small>
+          </p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

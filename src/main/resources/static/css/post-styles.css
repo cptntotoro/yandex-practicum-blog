@@ -1,0 +1,58 @@
+/* Заголовок поста */
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  color: #007bff;
+}
+
+/* Картинка поста */
+.img-fluid {
+  border-radius: 10px;
+  margin-bottom: 20px;
+  max-height: 400px;
+  object-fit: cover;
+}
+
+/* Текст поста */
+.post-content {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #444;
+}
+
+/* Теги */
+.tags {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+/* Лайки */
+.like-button {
+  margin-bottom: 20px;
+}
+
+/* Комментарии */
+.comment-card {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 15px;
+  margin-bottom: 10px;
+  background-color: #fff;
+}
+
+.comment-card .card-text {
+  margin-bottom: 10px;
+}
+
+.comment-card .btn {
+  margin-right: 10px;
+}
+
+/* Форма добавления комментария */
+#commentText {
+  margin-bottom: 10px;
+  border-radius: 5px;
+  padding: 10px;
+  border: 1px solid #ddd;
+}
