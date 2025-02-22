@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="'Yandex Practicum Blog | ' + ${post.title}"></title>
+    <meta name="description" content="Yandex Practicum Blog">
+
+    <link rel="icon" type="image/png" th:href="@{/images/favicon.ico}"/>
+    <link rel="stylesheet" th:href="@{/styles/common.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/styles/post.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/styles/post-modal.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/styles/comment.css}">
+
+    <script type="text/javascript" th:src="@{/scripts/api-config.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/post-modal.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/comment.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/post.js}"></script>
+</head>
+
+<body>
+<div th:replace="~{/fragments/header :: header}"></div>
+
+<main>
+    <article class="post" th:value="${post.uuid}">
+        <h1 class="post-title" th:text="${post.title}"></h1>
+        <img class="post-image" th:src="${post.imageUrl}" alt="Картинка поста">
+        <div class="post-content" th:utext="${post.content}"></div>
+        <div class="post-tags">
+            <a class="tag" th:each="tag:${post.tags}" th:text="${tag.title}" th:href="@{'/posts/tag/' + ${tag.uuid}}"></a>
+        </div>
+        <div class="post-actions">
+            <button class="btn btn-small like-btn" th:onclick="setLikeToPost([[${post.uuid}]])"
+                    th:text="'&#10084;&#65039; ' + ${post.likesCounter}"></button>
+            <div class="post-actions-modify">
+                <button class="btn btn-small edit-btn">&#x270F;&#xFE0F; Редактировать</button>
+                <button class="btn btn-small delete-btn" th:onclick="deletePost([[${post.uuid}]])">&#x1F5D1;&#xFE0F; Удалить</button>
+            </div>
+        </div>
+    </article>
+
+    <!-- Список комментариев -->
+    <section class="comments-section">
+        <div class="comments-section-header">
+            <h2 class="comments-header">Комментарии</h2>
+
+            <!-- Кнопка отображения формы добавления комментария -->
+            <a class="btn btn-large add-comment-btn" th:onclick="showAddCommentForm()">Добавить комментарий</a>
+        </div>
+
+        <!-- Форма добавления нового комментария -->
+        <form class="add-comment-form" th:action="@{'/posts/' + ${post.uuid} + '/comments'}" method="POST" th:object="${newComment}">
+            <textarea class="form-input add-comment-form-text" th:field="*{content}" placeholder="Ваш комментарий..." rows="4" cols="50" required></textarea>
+            <button class="btn btn-large add-comment-save_btn" type="submit">Сохранить</button>
+        </form>
+
+        <div class="comments-container" th:if="${not #lists.isEmpty(post.comments)}">
+            <div class="comment" th:each="comment : ${post.comments}"
+                 th:if="${comment != null}"
+                 th:include="~{fragments/comment :: comment(${post.uuid}, ${comment})}"
+                 th:value="${comment.uuid}" th:id="'comment-' + ${comment.uuid}">
+            </div>
+        </div>
+
+        <div class="comments-container" th:unless="${not #lists.isEmpty(post.comments)}">Комментариев пока нет.</div>
+    </section>
+</main>
+
+<!-- Модальное окно для редактирования поста -->
+<div class="modal-overlay" id="modalOverlay">
+    <div th:replace="~{fragments/post-modal :: post-form(${post}, @{/posts/{uuid}(uuid=${post.uuid})}, 'Редактировать пост')}"></div>
+</div>
+
+<div th:replace="~{/fragments/footer :: footer}"></div>
+
+</body>
+</html>

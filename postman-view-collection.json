@@ -1,0 +1,223 @@
+{
+  "info": {
+    "_postman_id": "a1b2c3d4-e5f6-7890",
+    "name": "Blog Platform API",
+    "description": "API для управления постами и комментариями",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Posts",
+      "item": [
+        {
+          "name": "Get all posts (paginated)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/posts?from=1&size=10",
+              "host": ["{{base_url}}"],
+              "path": ["posts"],
+              "query": [
+                {
+                  "key": "from",
+                  "value": "1"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "Получение списка постов с пагинацией"
+          },
+          "response": []
+        },
+        {
+          "name": "Get post by UUID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/posts/{{post_uuid}}",
+              "host": ["{{base_url}}"],
+              "path": ["posts", "{{post_uuid}}"]
+            },
+            "description": "Получение конкретного поста по его идентификатору"
+          },
+          "response": []
+        },
+        {
+          "name": "Create new post",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "title",
+                  "value": "Новый пост",
+                  "type": "text"
+                },
+                {
+                  "key": "content",
+                  "value": "Содержание нового поста",
+                  "type": "text"
+                },
+                {
+                  "key": "imageUrl",
+                  "value": "https://example.com/image.jpg",
+                  "type": "text"
+                },
+                {
+                  "key": "tags",
+                  "value": "{{tag_uuid}}",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/posts",
+              "host": ["{{base_url}}"],
+              "path": ["posts"]
+            },
+            "description": "Создание нового поста"
+          },
+          "response": []
+        },
+        {
+          "name": "Update post",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "title",
+                  "value": "Обновленный заголовок",
+                  "type": "text"
+                },
+                {
+                  "key": "content",
+                  "value": "Обновленное содержание",
+                  "type": "text"
+                },
+                {
+                  "key": "imageUrl",
+                  "value": "https://example.com/new-image.jpg",
+                  "type": "text"
+                },
+                {
+                  "key": "tags",
+                  "value": "{{tag_uuid}}",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/posts/{{post_uuid}}",
+              "host": ["{{base_url}}"],
+              "path": ["posts", "{{post_uuid}}"]
+            },
+            "description": "Обновление существующего поста"
+          },
+          "response": []
+        },
+        {
+          "name": "Get posts by tag",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/posts/tag/{{tag_uuid}}",
+              "host": ["{{base_url}}"],
+              "path": ["posts", "tag", "{{tag_uuid}}"]
+            },
+            "description": "Получение постов по тегу"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Comments",
+      "item": [
+        {
+          "name": "Add comment to post",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "content",
+                  "value": "Новый комментарий",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/posts/{{post_uuid}}/comments",
+              "host": ["{{base_url}}"],
+              "path": ["posts", "{{post_uuid}}", "comments"]
+            },
+            "description": "Добавление комментария к посту"
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "post_uuid",
+      "value": "64172a40-90bf-464a-95a1-0b603f74f08e"
+    },
+    {
+      "key": "tag_uuid",
+      "value": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "exec": [
+          ""
+        ],
+        "type": "text/javascript"
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "exec": [
+          ""
+        ],
+        "type": "text/javascript"
+      }
+    }
+  ]
+}

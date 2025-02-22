@@ -1,0 +1,33 @@
+body {
+    justify-content: space-between;
+}
+
+.bold-text {
+    font-weight: bold;
+}
+
+.error-container {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: var(--small-box-shadow);
+    margin-bottom: 20px;
+    padding: 20px;
+}
+
+.error-container__header {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #d9534f;
+}
+
+.error-container p {
+    color: var(--secondary-text-color);
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+.error-container__timestamp {
+    font-size: 14px;
+    color: #999;
+    margin-top: 20px;
+}

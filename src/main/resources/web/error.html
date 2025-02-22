@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yandex Practicum Blog | Ошибка API</title>
+    <meta name="description" content="Yandex Practicum Blog | Ошибка API">
+    <link rel="icon" type="image/png" th:href="@{/images/favicon.ico}"/>
+    <link rel="stylesheet" th:href="@{/styles/common.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/styles/error.css}">
+</head>
+<body>
+<div th:replace="~{/fragments/header :: header}"></div>
+
+<main>
+    <div class="error-container">
+        <h1 class="error-container__header">Ошибка API</h1>
+        <p class="bold-text">Статус: <span th:text="${error.status}"></span></p>
+        <p class="bold-text">Причина: <span th:text="${error.reason}"></span></p>
+        <p class="bold-text">Сообщение: <span th:text="${error.message}"></span></p>
+        <p class="error-container__timestamp">Время: <span
+                th:text="${#temporals.format(error.timestamp, 'dd.MM.yyyy HH:mm:ss')}"></span></p>
+    </div>
+</main>
+
+<div th:replace="~{/fragments/footer :: footer}"></div>
+</body>
+</html>
