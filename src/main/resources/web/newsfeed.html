@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yandex Practicum Blog | Лента постов</title>
+    <meta name="description" content="Yandex Practicum Blog | Лента постов">
+
+    <link rel="icon" type="image/png" th:href="@{/images/favicon.ico}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/styles/common.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/styles/newsfeed.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/styles/post-modal.css}">
+
+    <script type="text/javascript" th:src="@{/scripts/api-config.js}"></script>
+    <script type="text/javascript" th:src="@{/scripts/newsfeed-modal.js}"></script>
+</head>
+
+<body>
+<div th:replace="~{/fragments/header :: header}"></div>
+
+<main>
+    <!-- Список постов на странице -->
+    <div class="all-posts">
+        <h1 class="all-posts__header">Лента постов</h1>
+        <div class="all-posts__container">
+            <div class="post"
+                 th:if="${posts != null}"
+                 th:each="post : ${posts}"
+                 th:include="~{/fragments/newsfeed-post :: post(${post})}"
+            >
+            </div>
+        </div>
+    </div>
+
+    <!-- Форма для выбора количества постов на странице -->
+    <div th:if="${from != null && totalPages != null}" class="pagination-controls">
+        <!-- Форма для выбора количества постов на странице и номера страницы -->
+        <form id="paginationForm" th:action="@{/posts}" method="get">
+            <label for="size">Постов на странице:</label>
+            <select id="size" name="size" onchange="this.form.submit()">
+                <option value="10" th:selected="${size == 10}">10</option>
+                <option value="20" th:selected="${size == 20}">20</option>
+                <option value="50" th:selected="${size == 50}">50</option>
+            </select>
+            <input type="hidden" name="from" th:value=1>
+        </form>
+
+        <!-- Кнопки для переключения страниц -->
+        <div class="pagination-btns">
+            <a th:if="${from > 1}"
+               th:href="@{/posts(size=${size}, from=${from - 1})}"
+               class="btn btn-large pagination-btn">Предыдущая</a>
+            <span th:unless="${from > 1}" class="btn btn-large pagination-btn disabled">Предыдущая</span>
+
+            <span class="pagination-info" th:text="'Страница ' + ${from} + ' из ' + ${totalPages}"></span>
+
+            <a th:if="${from < totalPages}"
+               th:href="@{/posts(size=${size}, from=${from + 1})}"
+               class="btn btn-large pagination-btn">Следующая</a>
+            <span th:unless="${from < totalPages}" class="btn btn-large pagination-btn disabled">Следующая</span>
+        </div>
+    </div>
+</main>
+
+<!-- Модальное окно для добавления поста -->
+<div class="modal-overlay" id="modalOverlay">
+    <div th:replace="~{fragments/post-modal :: post-form(${post}, @{/posts}, 'Добавить пост')}"></div>
+</div>
+
+<div th:replace="~{/fragments/footer :: footer}"></div>
+
+</body>
+</html>

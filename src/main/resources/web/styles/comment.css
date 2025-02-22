@@ -1,0 +1,121 @@
+.comments-section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+}
+
+.comments-section-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.comments-header {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--primary-text-color);
+    margin: 0;
+}
+
+.comments-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.comment {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: var(--small-box-shadow);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.comment-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+.comment-body {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.comment-author {
+    font-weight: bold;
+}
+
+.comment-text {
+    color: var(--content-text);
+    line-height: 1.5;
+}
+
+.comment-date {
+    font-size: 14px;
+    color: var(--secondary-text-color);
+}
+
+.comment-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.cancel-comment-btn:hover {
+    background-color: var(--delete-hover-btn-color);
+}
+
+.edit-comment-form {
+    display: none;
+    margin-top: 10px;
+}
+
+.edit-comment-form textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: var(--standard-border-radius);
+    font-size: 16px;
+    line-height: 1.5;
+    resize: vertical;
+    margin-bottom: 10px;
+}
+
+.edit-comment-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.add-comment-form {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 15px;
+    width: 100%;
+}
+
+.add-comment-form-text {
+    font-family: inherit;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: var(--standard-border-radius);
+    resize: vertical;
+}
+
+.add-comment-save_btn {
+    background-color: var(--edit-btn-color);
+}
+
+.add-comment-save_btn:hover {
+    background-color: var(--edit-hover-btn-color);
+}
+
+.edit-comment-textarea {
+    width: 100%;
+    resize: vertical;
+}

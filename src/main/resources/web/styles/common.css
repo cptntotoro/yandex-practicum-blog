@@ -1,0 +1,177 @@
+:root {
+    --background-color: #f9f9f9;
+    --accent-color: #007BFF;
+    --primary-text-color: #333;
+    --secondary-text-color: #666;
+    --content-text: #444;
+
+    --blue-btn-hover-color: #0056b3;
+    --footer-bg-color: #f1f1f1;
+    --delete-btn-color: #dc3545;
+    --delete-hover-btn-color: #c82333;
+    --edit-btn-color: #24a641;
+    --edit-hover-btn-color: #218838;
+    --cancel-btn-color: #6c757d;
+    --cancel-hover-btn-color: #5a6268;
+
+    --standard-border-radius: 5px;
+    --small-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --moderate-box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+    --background-color-transition: background-color 0.3s ease;
+    --border-color-transition: border-color 0.3s ease;
+    --color-transition: color 0.3s ease;
+
+    --article-link-color: #007BFF;
+    --article-link-hover-color: #0056b3;
+    --article-link-visited-color: #6c757d;
+    --article-link-active-color: #0056b3;
+    --article-link-hover-decoration: underline;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 16px;
+}
+
+html {
+    block-size: 100%;
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--primary-text-color);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+a {
+    text-decoration: none;
+}
+
+.header {
+    position: sticky;
+    top: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: var(--accent-color);
+    color: white;
+}
+
+.header__logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+}
+
+.header__btn {
+    font-weight: 600;
+    background-color: white;
+    border-radius: var(--standard-border-radius);
+    color: var(--accent-color);
+    cursor: pointer;
+    padding: 10px 20px;
+    transition: var(--background-color-transition);
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    padding: 40px 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    align-items: center;
+}
+
+.form-input {
+    font-family: inherit;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: var(--standard-border-radius);
+    transition: var(--border-color-transition);
+    color: var(--primary-text-color);
+}
+
+.form-input:focus {
+    border-color: var(--accent-color);
+    outline: none;
+}
+
+.post-tags {
+    display: flex;
+    gap: 10px;
+}
+
+.tag {
+    display: inline-block;
+    background-color: #eee;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 14px;
+    color: var(--primary-text-color);
+}
+
+.tag:hover {
+    text-decoration: underline;
+}
+
+.btn {
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: var(--standard-border-radius);
+    cursor: pointer;
+    transition: var(--background-color-transition);
+}
+
+.btn:hover {
+    background-color: var(--blue-btn-hover-color);
+}
+
+.btn-large {
+    padding: 10px 20px;
+    font-size: 16px;
+}
+
+.btn-small {
+    padding: 6px 15px;
+    font-size: 14px;
+}
+
+.delete-btn, .delete-comment-btn {
+    background-color: var(--delete-btn-color);
+}
+
+.delete-btn:hover, .delete-comment-btn:hover {
+    background-color: var(--delete-hover-btn-color);
+}
+
+.edit-btn, .edit-comment-btn {
+    background-color: var(--edit-btn-color);
+}
+
+.edit-btn:hover, .edit-comment-btn:hover {
+    background-color: var(--edit-hover-btn-color);
+}
+
+.cancel-comment-btn {
+    background-color: var(--cancel-btn-color);
+}
+
+.cancel-comment-btn:hover {
+    background-color: var(--cancel-hover-btn-color);
+}
+
+footer {
+    padding: 20px;
+    text-align: center;
+    background-color: var(--footer-bg-color);
+    margin-top: auto;
+}
