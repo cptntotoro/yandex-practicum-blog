@@ -2,7 +2,6 @@ package ru.practicum.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -17,7 +16,6 @@ import org.springframework.transaction.PlatformTransactionManager;
 import javax.sql.DataSource;
 
 @Configuration
-@ComponentScan
 @PropertySource("classpath:application.properties")
 public class JdbcConfig {
     @Value("${spring.datasource.driverClassName}")

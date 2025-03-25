@@ -83,15 +83,6 @@ public class TagServiceTest {
         verify(tagRepository, times(1)).getAll();
     }
 
-//    @Test
-//    void update_shouldUpdateTag() {
-//        Mockito.doNothing().when(tagRepository).update(any());
-//
-//        tagService.update(newTag);
-//
-//        verify(tagRepository, times(1)).update(any());
-//    }
-
     @Test
     void delete_shouldDeleteTag() {
         Mockito.doNothing().when(tagRepository).deleteBy(tagUUID);

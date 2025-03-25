@@ -194,7 +194,8 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.4.0</version>
                 <configuration>
-                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                    <webXml>src/main/webapp/WEB-INF/web.xml</webXml>
+                    <failOnMissingWebXml>true</failOnMissingWebXml>
                 </configuration>
             </plugin>
         </plugins>

@@ -5,24 +5,15 @@ import java.util.UUID;
 /**
  * DTO тега
  */
-public class TagViewDto extends TagBaseDto {
-    private final UUID uuid;
-
-    private TagViewDto(UUID uuid, String title) {
-        super(title);
-        this.uuid = uuid;
-    }
-
-    public UUID getUuid() {
-        return uuid;
-    }
+public record TagViewDto(UUID uuid, String title) {
 
     public static Builder newBuilder() {
         return new Builder();
     }
 
-    public static class Builder extends TagBaseDto.Builder<Builder> {
+    public static class Builder {
         private UUID uuid;
+        private String title;
 
         public Builder() {
         }
@@ -32,7 +23,11 @@ public class TagViewDto extends TagBaseDto {
             return this;
         }
 
-        @Override
+        public Builder title(String title) {
+            this.title = title;
+            return this;
+        }
+
         protected Builder self() {
             return this;
         }
