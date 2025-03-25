@@ -30,8 +30,6 @@ public class DataSourceConfig {
     private String password;
     @Value("${spring.datasource.schema}")
     private String schema;
-//    @Value("${spring.datasource.data}")
-//    private String data;
 
     @Bean
     public DriverManagerDataSource dataSource(){
@@ -47,7 +45,6 @@ public class DataSourceConfig {
     public void populate(ContextRefreshedEvent event) {
         ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
         populator.addScript(new ClassPathResource(schema));
-//        populator.addScript(new ClassPathResource(data));
         populator.execute(dataSource());
     }
 

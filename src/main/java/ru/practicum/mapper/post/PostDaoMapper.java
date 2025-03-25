@@ -45,18 +45,6 @@ public class PostDaoMapper {
                 .build();
     }
 
-//    /**
-//     * Смаппить список постов для БД в список постов
-//     *
-//     * @param postDaoList Список постов для БД
-//     * @return Список постов
-//     */
-//    public static List<Post> postDaoListToPostList(List<PostDao> postDaoList) {
-//        return postDaoList.stream()
-//                .map(PostDaoMapper::postDaoToPost)
-//                .collect(Collectors.toList());
-//    }
-
     /**
      * Смаппить список постов для БД в список превью постов
      * @param postDaoList Список постов для БД

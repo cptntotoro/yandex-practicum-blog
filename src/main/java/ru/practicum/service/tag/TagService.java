@@ -17,13 +17,6 @@ public interface TagService extends BaseService<Tag> {
      */
     List<Tag> getAll();
 
-//    /**
-//     * Обновить тег
-//     *
-//     * @param tag Тег
-//     */
-//    void update(Tag tag);
-
     /**
      * Получить теги по идентификатору поста
      *

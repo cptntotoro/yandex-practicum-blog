@@ -36,12 +36,6 @@ public class TagServiceImpl implements TagService {
         return getTagByUuid(tagUuid);
     }
 
-//    @Override
-//    public void update(Tag tag) {
-//        validateTag(tag);
-//        tagRepository.update(TagDaoMapper.tagToTagDao(tag));
-//    }
-
     @Override
     public List<Tag> getAllBy(UUID postUuid) {
         return TagDaoMapper.tagDaoListToTagList(tagRepository.getAllBy(postUuid));

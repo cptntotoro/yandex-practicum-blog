@@ -7,12 +7,6 @@ import java.util.List;
 import java.util.UUID;
 
 public interface PostRepository extends BaseRepository<PostDao> {
-//    /**
-//     * Получить все посты
-//     *
-//     * @return Список постов
-//     */
-//    List<PostDao> getAll();
 
     /**
      * Увеличить число лайков поста на единицу

@@ -65,12 +65,11 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/styles/**").addResourceLocations("classpath:/web/styles/");
         registry.addResourceHandler("/scripts/**").addResourceLocations("classpath:/web/scripts/");
         registry.addResourceHandler("/images/**").addResourceLocations("classpath:/web/images/");
-//        registry.addResourceHandler("/fragments/**").addResourceLocations("classpath:/web/fragments/");
     }
 
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         converters.add(new FormHttpMessageConverter()); // Для обработки данных форм
-        converters.add(new MappingJackson2HttpMessageConverter()); // Для JSON (если нужно)
+        converters.add(new MappingJackson2HttpMessageConverter()); // Для JSON
     }
 }
