@@ -29,14 +29,21 @@ public class CommentRepositoryJdbc implements CommentRepository {
     }
 
     private static final String sqlAddCommentToPostByUuid = """
+        WITH post_check AS (
+            SELECT 1 FROM posts WHERE post_uuid = ? LIMIT 1
+        )
         INSERT INTO comments (post_uuid, text_content)
-        VALUES (?, ?)
+        SELECT ?, ?
+        FROM post_check
+        WHERE EXISTS (SELECT 1 FROM post_check)
     """;
 
     private static final String sqlUpdateCommentByUuid = """
-        UPDATE comments
+        UPDATE comments c
         SET text_content = ?
-        WHERE comment_uuid = ?
+        FROM posts p
+        WHERE c.comment_uuid = ?
+        AND c.post_uuid = p.post_uuid
     """;
 
     private static final String sqlGetCommentByUuid = """
@@ -61,27 +68,37 @@ public class CommentRepositoryJdbc implements CommentRepository {
     public UUID save(CommentDao comment) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
-        jdbcTemplate.update(connection -> {
-            PreparedStatement ps = connection.prepareStatement(sqlAddCommentToPostByUuid, Statement.RETURN_GENERATED_KEYS);
+        int rowsUpdated = jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(
+                    sqlAddCommentToPostByUuid,
+                    Statement.RETURN_GENERATED_KEYS
+            );
             ps.setObject(1, comment.getPostUuid());
-            ps.setString(2, comment.getContent());
+            ps.setObject(2, comment.getPostUuid());
+            ps.setString(3, comment.getContent());
             return ps;
         }, keyHolder);
+
+        if (rowsUpdated == 0) {
+            throw new PostNotFoundException("Пост с uuid=" + comment.getPostUuid() + " не найден");
+        }
 
         return (UUID) Objects.requireNonNull(keyHolder.getKeys()).get("comment_uuid");
     }
 
     @Override
     public void update(CommentDao comment) {
-        UUID commentUuid = comment.getUuid();
-
-        int rowsUpdated = jdbcTemplate.update(sqlUpdateCommentByUuid,
+        int rowsUpdated = jdbcTemplate.update(
+                sqlUpdateCommentByUuid,
                 comment.getContent(),
-                commentUuid
+                comment.getUuid()
         );
 
         if (rowsUpdated == 0) {
-            throw new CommentNotFoundException("Комментарий с uuid=" + commentUuid + "не обновлен. Комментарий с таким uuid не найден");
+            throw new CommentNotFoundException(
+                    "Комментарий с uuid=" + comment.getUuid() + " не обновлен. " +
+                            "Либо комментарий не существует, либо пост был удален"
+            );
         }
     }
 
@@ -99,7 +116,7 @@ public class CommentRepositoryJdbc implements CommentRepository {
         int rowsUpdated = jdbcTemplate.update(sqlDeleteCommentByUuid, uuid);
 
         if (rowsUpdated == 0) {
-            throw new PostNotFoundException("Комментарий с id=" + uuid + " не был удален. Комментарий с таким uuid не найден");
+            throw new CommentNotFoundException("Комментарий с id=" + uuid + " не был удален. Комментарий с таким uuid не найден");
         }
     }
 
