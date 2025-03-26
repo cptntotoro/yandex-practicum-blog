@@ -10,6 +10,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import ru.practicum.config.DataSourceConfig;
 import ru.practicum.config.WebConfig;
 import ru.practicum.dao.post.PostDao;
+import ru.practicum.exception.post.PostNotFoundException;
 
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -23,135 +24,233 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringJUnitConfig(classes = {DataSourceConfig.class, WebConfig.class})
 @TestPropertySource(locations = "classpath:application-test.properties")
 @WebAppConfiguration
-public class PostRepositoryTest {
+class PostRepositoryTest {
+    private static final String POST_TITLE_1 = "Название поста1";
+    private static final String POST_TITLE_2 = "Название поста2";
+    private static final String POST_TITLE_3 = "Название поста3";
+    private static final String POST_CONTENT_1 = "Контент поста1";
+    private static final String POST_CONTENT_2 = "Контент поста2";
+    private static final String POST_CONTENT_3 = "Контент поста3";
+    private static final String IMAGE_URL_1 = "https://example.com/image1.jpg";
+    private static final String IMAGE_URL_3 = "https://example.com/image3.jpg";
+    private static final String NEW_POST_TITLE = "Новый пост";
+    private static final String NEW_POST_CONTENT = "Контент нового поста";
+    private static final String NEW_IMAGE_URL = "https://example.com/new.jpg";
+    private static final String UPDATED_POST_TITLE = "Обновленный пост";
+    private static final String UPDATED_POST_CONTENT = "Обновленный контент";
+    private static final String UPDATED_IMAGE_URL = "https://example.com/updated.jpg";
+    private static final String TAG_TITLE_1 = "Тег1";
+    private static final String TAG_TITLE_2 = "Тег2";
+
     @Autowired
     private JdbcTemplate jdbcTemplate;
-
     @Autowired
     private PostRepository postRepository;
 
-    private static final UUID post1uuid = UUID.randomUUID();
-    private static final UUID post2uuid = UUID.randomUUID();
-    private static final UUID post3uuid = UUID.randomUUID();
-    private static final UUID tag1uuid = UUID.randomUUID();
-    private static final UUID tag2uuid = UUID.randomUUID();
-    private static final UUID comment1uuid = UUID.randomUUID();
-    private static final UUID comment2uuid = UUID.randomUUID();
+    private UUID post1uuid;
+    private UUID post2uuid;
+    private UUID post3uuid;
+    private UUID tag1uuid;
+    private UUID tag2uuid;
+    private UUID nonExistentUuid;
 
     @BeforeEach
     void setUp() {
-        jdbcTemplate.execute("DELETE FROM tags");
-        jdbcTemplate.execute("DELETE FROM posts");
+        post1uuid = UUID.randomUUID();
+        post2uuid = UUID.randomUUID();
+        post3uuid = UUID.randomUUID();
+        tag1uuid = UUID.randomUUID();
+        tag2uuid = UUID.randomUUID();
+        nonExistentUuid = UUID.randomUUID();
+
+        clearDatabase();
+        initializeTestData();
+    }
+
+    private void clearDatabase() {
         jdbcTemplate.execute("DELETE FROM comments");
         jdbcTemplate.execute("DELETE FROM post_tags");
+        jdbcTemplate.execute("DELETE FROM tags");
+        jdbcTemplate.execute("DELETE FROM posts");
+    }
 
-        String sqlAddPost = "INSERT INTO posts (post_uuid, title, image_url, text_content, date_time) VALUES (?, ?, ?, ?, ?)";
-        jdbcTemplate.update(sqlAddPost, post1uuid, "Название поста1", "https://upload.wikimedia.org/wikipedia/commons/4/4d/Cat_November_2010-1a.jpg", "Контент поста1", LocalDateTime.now());
-        jdbcTemplate.update(sqlAddPost, post2uuid, "Название поста2", null, "Контент поста 2", LocalDateTime.now());
-        jdbcTemplate.update(sqlAddPost, post3uuid, "Название поста3", null, "Контент поста 3", LocalDateTime.now());
+    private void initializeTestData() {
+        insertPost(post1uuid, POST_TITLE_1, IMAGE_URL_1, POST_CONTENT_1, 10, LocalDateTime.now());
+        insertPost(post2uuid, POST_TITLE_2, null, POST_CONTENT_2, 5, LocalDateTime.now().minusDays(1));
+        insertPost(post3uuid, POST_TITLE_3, IMAGE_URL_3, POST_CONTENT_3, 15, LocalDateTime.now().minusDays(2));
 
-        String sqlAddComments = "INSERT INTO comments (comment_uuid, post_uuid, text_content, date_time) VALUES (?, ?, ?, ?)";
-        jdbcTemplate.update(sqlAddComments, comment1uuid, post1uuid, "Контент комментария 1", LocalDateTime.now());
-        jdbcTemplate.update(sqlAddComments, comment2uuid, post1uuid, "Контент комментария 2", LocalDateTime.now());
+        insertTag(tag1uuid, TAG_TITLE_1);
+        insertTag(tag2uuid, TAG_TITLE_2);
 
-        String sqlAddTags = "INSERT INTO tags (tag_uuid, title) VALUES (?, ?)";
-        jdbcTemplate.update(sqlAddTags, tag1uuid, "Тег 1");
-        jdbcTemplate.update(sqlAddTags, tag2uuid, "Тег 2");
+        linkPostToTag(post1uuid, tag1uuid);
+        linkPostToTag(post2uuid, tag2uuid);
+        linkPostToTag(post3uuid, tag1uuid);
+    }
 
-        String sqlAddTagsToPost = "INSERT INTO post_tags (pt_uuid, post_uuid, tag_uuid) VALUES (?, ?, ?)";
-        jdbcTemplate.update(sqlAddTagsToPost, UUID.randomUUID(), post1uuid, tag1uuid);
-        jdbcTemplate.update(sqlAddTagsToPost, UUID.randomUUID(), post2uuid, tag2uuid);
+    private void insertPost(UUID postUuid, String title, String imageUrl, String content, int likes, LocalDateTime dateTime) {
+        jdbcTemplate.update(
+                "INSERT INTO posts (post_uuid, title, image_url, text_content, date_time, likes) VALUES (?, ?, ?, ?, ?, ?)",
+                postUuid, title, imageUrl, content, dateTime, likes
+        );
+    }
+
+    private void insertTag(UUID tagUuid, String title) {
+        jdbcTemplate.update(
+                "INSERT INTO tags (tag_uuid, title) VALUES (?, ?)",
+                tagUuid, title
+        );
+    }
+
+    private void linkPostToTag(UUID postUuid, UUID tagUuid) {
+        jdbcTemplate.update(
+                "INSERT INTO post_tags (pt_uuid, post_uuid, tag_uuid) VALUES (?, ?, ?)",
+                UUID.randomUUID(), postUuid, tagUuid
+        );
     }
 
     @Test
-    void getPage_shouldReturnPosts() {
-        List<PostDao> posts = postRepository.getPage(1, 10).stream().toList();
+    void get_shouldReturnPostWhenExists() {
+        PostDao post = postRepository.get(post1uuid);
 
-        assertNotNull(posts);
-        assertEquals(3, posts.size());
+        assertAll(
+                () -> assertNotNull(post),
+                () -> assertEquals(post1uuid, post.getUuid()),
+                () -> assertEquals(POST_TITLE_1, post.getTitle()),
+                () -> assertEquals(POST_CONTENT_1, post.getContent()),
+                () -> assertEquals(10, post.getLikesCounter())
+        );
+    }
+
+    @Test
+    void get_shouldThrowExceptionWhenPostNotExists() {
+        assertThrows(PostNotFoundException.class, () -> postRepository.get(nonExistentUuid));
+    }
+
+    @Test
+    void save_shouldSaveNewPostAndReturnUuid() throws MalformedURLException, URISyntaxException {
+        PostDao newPost = buildPost(NEW_POST_TITLE, NEW_POST_CONTENT, NEW_IMAGE_URL);
+
+        UUID savedUuid = postRepository.save(newPost);
+        PostDao savedPost = postRepository.get(savedUuid);
+
+        assertAll(
+                () -> assertNotNull(savedUuid),
+                () -> assertEquals(NEW_POST_TITLE, savedPost.getTitle()),
+                () -> assertEquals(NEW_POST_CONTENT, savedPost.getContent())
+        );
+    }
+
+    @Test
+    void update_shouldUpdateExistingPost() throws MalformedURLException, URISyntaxException {
+        PostDao updatedPost = buildPost(post1uuid, UPDATED_POST_TITLE, UPDATED_POST_CONTENT, UPDATED_IMAGE_URL);
+
+        postRepository.update(updatedPost);
+        PostDao result = postRepository.get(post1uuid);
+
+        assertAll(
+                () -> assertEquals(UPDATED_POST_TITLE, result.getTitle()),
+                () -> assertEquals(UPDATED_POST_CONTENT, result.getContent()),
+                () -> assertEquals(UPDATED_IMAGE_URL, result.getImageUrl().toString())
+        );
+    }
+
+    @Test
+    void update_shouldThrowExceptionWhenPostNotExists() throws MalformedURLException, URISyntaxException {
+        PostDao nonExistentPost = buildPost(nonExistentUuid, "Несуществующий пост", "Контент", null);
+
+        assertThrows(PostNotFoundException.class, () -> postRepository.update(nonExistentPost));
+    }
+
+    @Test
+    void deleteBy_shouldDeleteExistingPost() {
+        postRepository.deleteBy(post1uuid);
+
+        assertThrows(PostNotFoundException.class, () -> postRepository.get(post1uuid));
+    }
+
+    @Test
+    void deleteBy_shouldThrowExceptionWhenPostNotExists() {
+        assertThrows(PostNotFoundException.class, () -> postRepository.deleteBy(nonExistentUuid));
+    }
+
+    @Test
+    void getAllByTag_shouldReturnPostsWithTag() {
+        List<PostDao> posts = postRepository.getAllBy(tag1uuid);
+
+        assertAll(
+                () -> assertEquals(2, posts.size()),
+                () -> assertTrue(posts.stream().anyMatch(p -> p.getUuid().equals(post1uuid))),
+                () -> assertTrue(posts.stream().anyMatch(p -> p.getUuid().equals(post3uuid)))
+        );
+    }
+
+    @Test
+    void setLike_shouldIncrementLikesCounter() {
+        int initialLikes = postRepository.get(post1uuid).getLikesCounter();
+
+        postRepository.setLike(post1uuid);
+        int updatedLikes = postRepository.get(post1uuid).getLikesCounter();
+
+        assertEquals(initialLikes + 1, updatedLikes);
+    }
+
+    @Test
+    void setLike_shouldThrowExceptionWhenPostNotExists() {
+        assertThrows(PostNotFoundException.class, () -> postRepository.setLike(nonExistentUuid));
     }
 
     @Test
     void getPage_shouldReturnPostsWithPagination() {
-        int page = 1; // Первая страница
-        int size = 2; // 2 поста на странице
+        List<PostDao> posts = postRepository.getPage(1, 2);
 
-        List<PostDao> posts = postRepository.getPage(page, size).stream().toList();
-
-        assertNotNull(posts);
-        assertEquals(2, posts.size()); // Ожидаем 2 поста на первой странице
+        assertAll(
+                () -> assertEquals(2, posts.size()),
+                () -> assertTrue(posts.getFirst().getDateTime().isAfter(posts.get(1).getDateTime()))
+        );
     }
 
     @Test
     void getPage_shouldReturnEmptyListForInvalidPage() {
-        int page = 10; // Несуществующая страница
-        int size = 2; // 2 поста на странице
+        List<PostDao> posts = postRepository.getPage(10, 2);
 
-        List<PostDao> posts = postRepository.getPage(page, size).stream().toList();
-
-        assertNotNull(posts);
         assertTrue(posts.isEmpty());
     }
 
     @Test
-    void getPage_shouldReturnAllPostsIfSizeIsLarge() {
-        int page = 1; // Первая страница
-        int size = 10; // 10 постов на странице (больше, чем общее количество постов)
-
-        List<PostDao> posts = postRepository.getPage(page, size).stream().toList();
-
-        assertNotNull(posts);
-        assertEquals(3, posts.size()); // Ожидаем все 3 поста, так как size больше общего количества
+    void getTotal_shouldReturnTotalPostsCount() {
+        assertEquals(3, postRepository.getTotal());
     }
 
     @Test
-    void get_shouldReturnPost() {
-        PostDao post = postRepository.get(post1uuid);
-
-        assertNotNull(post);
-        assertNotNull(post.getUuid());
-        assertNotNull(post.getTitle());
-        assertNotNull(post.getContent());
-        assertNotNull(post.getDateTime());
-        assertNotNull(post.getLikesCounter());
-        assertNotNull(post.getImageUrl());
+    void getTotal_shouldReturnZeroWhenNoPosts() {
+        clearDatabase();
+        assertEquals(0, postRepository.getTotal());
     }
 
     @Test
-    void save_shouldSavePost() throws MalformedURLException, URISyntaxException {
-        PostDao post = new PostDao.Builder()
-                .title("Пост4")
-                .content("Контент4")
-                .imageUrl(new URI("https://upload.wikimedia.org/wikipedia/commons/4/4d/Cat_November_2010-1a.jpg").toURL())
+    void isExist_shouldReturnTrueForExistingPost() {
+        assertTrue(postRepository.isExist(post1uuid));
+    }
+
+    @Test
+    void isExist_shouldReturnFalseForNonExistingPost() {
+        assertFalse(postRepository.isExist(nonExistentUuid));
+    }
+
+    private PostDao buildPost(String title, String content, String imageUrl) throws MalformedURLException, URISyntaxException {
+        return new PostDao.Builder()
+                .title(title)
+                .content(content)
+                .imageUrl(imageUrl != null ? new URI(imageUrl).toURL() : null)
                 .build();
-
-        UUID savedPostUuid = postRepository.save(post);
-
-        PostDao savedPost = postRepository.get(savedPostUuid);
-
-        assertNotNull(savedPostUuid);
-        assertNotNull(savedPost.getUuid());
-        assertEquals("Пост4", savedPost.getTitle());
-        assertEquals("Контент4", savedPost.getContent());
-        assertNotNull(savedPost.getDateTime());
-        assertNotNull(savedPost.getLikesCounter());
     }
 
-    @Test
-    void update_shouldUpdatePost() {
-        PostDao post = new PostDao.Builder()
-                .uuid(post2uuid)
-                .title("Пост4")
-                .content("Контент4")
+    private PostDao buildPost(UUID uuid, String title, String content, String imageUrl) throws MalformedURLException, URISyntaxException {
+        return new PostDao.Builder()
+                .uuid(uuid)
+                .title(title)
+                .content(content)
+                .imageUrl(imageUrl != null ? new URI(imageUrl).toURL() : null)
                 .build();
-
-        postRepository.update(post);
-
-        PostDao updatedPost = postRepository.get(post2uuid);
-
-        assertNotNull(updatedPost);
-        assertEquals(post2uuid, updatedPost.getUuid());
-        assertEquals("Пост4", updatedPost.getTitle());
-        assertEquals("Контент4", updatedPost.getContent());
     }
 }

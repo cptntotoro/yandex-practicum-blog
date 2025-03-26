@@ -6,6 +6,9 @@ import ru.practicum.repository.BaseRepository;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Репозиторий постов
+ */
 public interface PostRepository extends BaseRepository<PostDao> {
 
     /**
@@ -30,4 +33,12 @@ public interface PostRepository extends BaseRepository<PostDao> {
      * @return Число постов
      */
     long getTotal();
+
+    /**
+     * Проверить существование поста по идентификатору
+     *
+     * @param postUuid Идентификатор поста
+     * @return Да/Нет
+     */
+    boolean isExist(UUID postUuid);
 }

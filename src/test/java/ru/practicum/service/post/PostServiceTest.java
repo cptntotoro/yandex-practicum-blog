@@ -27,44 +27,36 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @TestPropertySource(locations = "classpath:application-test.properties")
-public class PostServiceTest {
+class PostServiceTest {
+    private static final String POST_TITLE = "Заголовок";
+    private static final String POST_CONTENT = "Контент";
+    private static final String IMAGE_URL = "https://upload.wikimedia.org/wikipedia/commons/4/4d/Cat_November_2010-1a.jpg";
+    private static final int PAGE = 1;
+    private static final int SIZE = 10;
+    private static final long TOTAL_COUNT = 1L;
+
     @InjectMocks
     private PostServiceImpl postService;
 
     @Mock
     private PostRepository postRepository;
-
     @Mock
     private TagService tagService;
-
     @Mock
     private CommentService commentService;
 
     private Post post;
     private Post savedPost;
-    private final UUID postUuid = UUID.randomUUID();
-    private final URL imageUrl;
-
-    public PostServiceTest() throws URISyntaxException, MalformedURLException {
-        this.imageUrl = new URI("https://upload.wikimedia.org/wikipedia/commons/4/4d/Cat_November_2010-1a.jpg").toURL();
-    }
+    private UUID postUuid;
+    private URL imageUrl;
 
     @BeforeEach
-    void setup() {
-        post = new Post.Builder()
-                .title("Заголовок")
-                .content("Контент")
-                .imageUrl(imageUrl)
-                .tags(List.of(new Tag.Builder().uuid(UUID.randomUUID()).build()))
-                .build();
+    void setUp() throws URISyntaxException, MalformedURLException {
+        postUuid = UUID.randomUUID();
+        imageUrl = new URI(IMAGE_URL).toURL();
 
-        savedPost = new Post.Builder()
-                .uuid(postUuid)
-                .title("Заголовок")
-                .content("Контент")
-                .imageUrl(imageUrl)
-                .tags(List.of(new Tag.Builder().uuid(UUID.randomUUID()).build()))
-                .build();
+        post = buildPost(null, POST_TITLE, POST_CONTENT, imageUrl);
+        savedPost = buildPost(postUuid, POST_TITLE, POST_CONTENT, imageUrl);
     }
 
     @Test
@@ -76,11 +68,14 @@ public class PostServiceTest {
 
         Post result = postService.save(post);
 
-        assertNotNull(result);
-        assertEquals(postUuid, result.getUuid());
-        verify(postRepository, times(1)).save(any());
-        verify(postRepository, times(1)).get(postUuid);
-        verify(tagService, times(1)).batchUpdatePostTags(any(), any());
+        assertAll(
+                () -> assertNotNull(result),
+                () -> assertEquals(postUuid, result.getUuid())
+        );
+
+        verify(postRepository).save(any());
+        verify(postRepository).get(postUuid);
+        verify(tagService).batchUpdatePostTags(any(), any());
     }
 
     @Test
@@ -91,11 +86,22 @@ public class PostServiceTest {
 
         Post result = postService.update(savedPost);
 
-        assertNotNull(result);
-        assertEquals(postUuid, result.getUuid());
-        verify(postRepository, times(1)).update(any());
-        verify(tagService, times(1)).deleteAllBy(postUuid);
-        verify(tagService, times(1)).batchUpdatePostTags(postUuid, List.of(savedPost.getTags().getFirst().getUuid()));
+        assertAll(
+                () -> assertNotNull(result),
+                () -> assertEquals(postUuid, result.getUuid())
+        );
+
+        verify(postRepository).update(any());
+        verify(tagService).deleteAllBy(postUuid);
+        verify(tagService).batchUpdatePostTags(eq(postUuid), anyList());
+    }
+
+    @Test
+    void checkIsExist_shouldNotThrowExceptionWhenPostExists() {
+        when(postRepository.isExist(postUuid)).thenReturn(true);
+
+        assertDoesNotThrow(() -> postService.checkIsExist(postUuid));
+        verify(postRepository).isExist(postUuid);
     }
 
     @Test
@@ -107,26 +113,30 @@ public class PostServiceTest {
 
         List<PostPreview> result = postService.getAllByTag(tagUuid);
 
-        assertNotNull(result);
-        assertEquals(1, result.size());
-        assertEquals(postUuid, result.getFirst().getUuid());
-        verify(postRepository, times(1)).getAllBy(tagUuid);
+        assertAll(
+                () -> assertNotNull(result),
+                () -> assertEquals(1, result.size()),
+                () -> assertEquals(postUuid, result.getFirst().getUuid())
+        );
+
+        verify(postRepository).getAllBy(tagUuid);
     }
 
     @Test
     void getPage_shouldReturnPostsWithPagination() {
-        int page = 1;
-        int size = 10;
-        when(postRepository.getPage(page, size)).thenReturn(List.of(PostDaoMapper.postToPostDao(savedPost)));
+        when(postRepository.getPage(PAGE, SIZE)).thenReturn(List.of(PostDaoMapper.postToPostDao(savedPost)));
         when(tagService.getAllBy(postUuid)).thenReturn(savedPost.getTags());
         when(commentService.getAllBy(postUuid)).thenReturn(savedPost.getComments());
 
-        List<PostPreview> result = postService.getPage(page, size);
+        List<PostPreview> result = postService.getPage(PAGE, SIZE);
 
-        assertNotNull(result);
-        assertEquals(1, result.size());
-        assertEquals(postUuid, result.getFirst().getUuid());
-        verify(postRepository, times(1)).getPage(page, size);
+        assertAll(
+                () -> assertNotNull(result),
+                () -> assertEquals(1, result.size()),
+                () -> assertEquals(postUuid, result.getFirst().getUuid())
+        );
+
+        verify(postRepository).getPage(PAGE, SIZE);
     }
 
     @Test
@@ -137,36 +147,41 @@ public class PostServiceTest {
 
         Post result = postService.get(postUuid);
 
-        assertNotNull(result);
-        assertEquals(postUuid, result.getUuid());
-        verify(postRepository, times(1)).get(postUuid);
+        assertAll(
+                () -> assertNotNull(result),
+                () -> assertEquals(postUuid, result.getUuid())
+        );
+
+        verify(postRepository).get(postUuid);
     }
 
     @Test
     void setLike_shouldCallRepository() {
-        doNothing().when(postRepository).setLike(postUuid);
-
         postService.setLike(postUuid);
-
-        verify(postRepository, times(1)).setLike(postUuid);
+        verify(postRepository).setLike(postUuid);
     }
 
     @Test
     void delete_shouldCallRepository() {
-        doNothing().when(postRepository).deleteBy(postUuid);
-
         postService.delete(postUuid);
-
-        verify(postRepository, times(1)).deleteBy(postUuid);
+        verify(postRepository).deleteBy(postUuid);
     }
 
     @Test
     void getTotal_shouldReturnTotalCount() {
-        when(postRepository.getTotal()).thenReturn(1L);
+        when(postRepository.getTotal()).thenReturn(TOTAL_COUNT);
 
-        long result = postService.getTotal();
+        assertEquals(TOTAL_COUNT, postService.getTotal());
+        verify(postRepository).getTotal();
+    }
 
-        assertEquals(1L, result);
-        verify(postRepository, times(1)).getTotal();
+    private Post buildPost(UUID uuid, String title, String content, URL imageUrl) {
+        return new Post.Builder()
+                .uuid(uuid)
+                .title(title)
+                .content(content)
+                .imageUrl(imageUrl)
+                .tags(List.of(new Tag.Builder().uuid(UUID.randomUUID()).build()))
+                .build();
     }
 }

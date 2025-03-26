@@ -14,6 +14,7 @@ public interface PostService extends BaseService<Post> {
 
     /**
      * Получить все посты по тегу
+     *
      * @param tagUuid Идентификатор тега
      * @return Список постов
      */
@@ -21,12 +22,14 @@ public interface PostService extends BaseService<Post> {
 
     /**
      * Поставить лайк посту по идентификатору
+     *
      * @param postUuid Идентификатор постав
      */
     void setLike(UUID postUuid);
 
     /**
      * Обновить пост
+     *
      * @param post Пост
      * @return Пост
      */
@@ -34,6 +37,7 @@ public interface PostService extends BaseService<Post> {
 
     /**
      * Получить пост по идентификатору
+     *
      * @param uuid Идентификатор
      * @return Пост
      */
@@ -41,15 +45,24 @@ public interface PostService extends BaseService<Post> {
 
     /**
      * Получить страницу постов
-     * @param page - номер страницы
-     * @param size - размер выдачи
-     * @return - список постов для страницы
+     *
+     * @param page Номер страницы
+     * @param size Размер выдачи
+     * @return Список постов для страницы
      */
     List<PostPreview> getPage(int page, int size);
 
     /**
      * Получить число всех постов
+     *
      * @return Число всех постов
      */
     long getTotal();
+
+    /**
+     * Проверить существование поста по идентификатору
+     *
+     * @param postUuid Идентификатор поста
+     */
+    void checkIsExist(UUID postUuid);
 }

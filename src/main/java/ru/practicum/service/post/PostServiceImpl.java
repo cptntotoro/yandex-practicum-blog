@@ -3,6 +3,7 @@ package ru.practicum.service.post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.exception.post.PostNotFoundException;
 import ru.practicum.mapper.post.PostDaoMapper;
 import ru.practicum.model.post.BasePost;
 import ru.practicum.model.post.Post;
@@ -68,6 +69,13 @@ public class PostServiceImpl implements PostService {
     @Transactional(readOnly = true)
     public long getTotal() {
         return postRepository.getTotal();
+    }
+
+    @Override
+    public void checkIsExist(UUID postUuid) {
+        if (!postRepository.isExist(postUuid)) {
+            throw new PostNotFoundException("Пост с uuid=" + postUuid + " не найден");
+        }
     }
 
     @Override
