@@ -80,6 +80,10 @@ public class PostRepositoryJdbc implements PostRepository {
         SELECT COUNT(*) FROM posts
     """;
 
+    private static final String sqlCountPostByUuid = """
+        SELECT COUNT(*) FROM posts WHERE post_uuid = ?
+    """;
+
     @Override
     public PostDao get(UUID uuid) {
         try {
@@ -161,6 +165,17 @@ public class PostRepositoryJdbc implements PostRepository {
     public long getTotal() {
         Long count = jdbcTemplate.queryForObject(sqlGetTotal, Long.class);
         return count != null ? count : 0;
+    }
+
+    @Override
+    public boolean isExist(UUID postUuid) {
+        Integer postCount = jdbcTemplate.queryForObject(
+                sqlCountPostByUuid,
+                Integer.class,
+                postUuid
+        );
+
+        return postCount != null && postCount > 0;
     }
 
     private static final RowMapper<PostDao> POST_ROW_MAPPER = (rs, rowNum) -> {

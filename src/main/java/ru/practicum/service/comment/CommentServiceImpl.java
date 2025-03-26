@@ -16,16 +16,19 @@ import java.util.UUID;
  */
 @Service
 public class CommentServiceImpl implements CommentService {
-    private final CommentRepository commentRepository;
+    /**
+     * Репозиторий комментариев
+     */
+    private CommentRepository commentRepository;
 
     @Autowired
-    public CommentServiceImpl(CommentRepository commentRepository) {
+    public void setCommentRepository(CommentRepository commentRepository) {
         this.commentRepository = commentRepository;
     }
 
     @Override
     public List<Comment> getAllBy(UUID postUuid) {
-        return getAllCommentsByPostUuid(postUuid);
+        return CommentDaoMapper.commentDaoListToCommentList(commentRepository.getAllBy(postUuid));
     }
 
     @Override
@@ -33,7 +36,7 @@ public class CommentServiceImpl implements CommentService {
     public Comment save(Comment comment) {
         validateComment(comment);
         UUID commentUuid = commentRepository.save(CommentDaoMapper.commentToCommentDao(comment));
-        return getCommentByUuid(commentUuid);
+        return CommentDaoMapper.commentDaoToComment(commentRepository.get(commentUuid));
     }
 
     @Override
@@ -48,30 +51,10 @@ public class CommentServiceImpl implements CommentService {
     }
 
     /**
-     * Получает все комментарии по UUID поста.
-     *
-     * @param postUuid UUID поста
-     * @return Коллекция комментариев
-     */
-    private List<Comment> getAllCommentsByPostUuid(UUID postUuid) {
-        return CommentDaoMapper.commentDaoListToCommentList(commentRepository.getAllBy(postUuid));
-    }
-
-    /**
-     * Получает комментарий по UUID.
-     *
-     * @param commentUuid UUID комментария
-     * @return Комментарий
-     */
-    private Comment getCommentByUuid(UUID commentUuid) {
-        return CommentDaoMapper.commentDaoToComment(commentRepository.get(commentUuid));
-    }
-
-    /**
-     * Валидирует комментарий.
+     * Проверить комментарий
      *
      * @param comment Комментарий
-     * @throws InvalidCommentException если комментарий невалиден
+     * @throws InvalidCommentException Если комментарий невалиден
      */
     private void validateComment(Comment comment) {
         if (comment.getContent() == null || comment.getContent().trim().isEmpty()) {
