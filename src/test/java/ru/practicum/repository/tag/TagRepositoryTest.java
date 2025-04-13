@@ -3,12 +3,12 @@ package ru.practicum.repository.tag;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.context.annotation.Import;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
-import org.springframework.test.context.web.WebAppConfiguration;
-import ru.practicum.config.DataSourceConfig;
-import ru.practicum.config.WebConfig;
+import ru.practicum.config.TestRepositoryConfig;
 import ru.practicum.dao.tag.TagDao;
 import ru.practicum.exception.tag.TagNotFoundException;
 
@@ -17,9 +17,10 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringJUnitConfig(classes = {DataSourceConfig.class, WebConfig.class})
-@TestPropertySource(locations = "classpath:application-test.properties")
-@WebAppConfiguration
+@DataJdbcTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@TestPropertySource(locations="classpath:application-test.properties")
+@Import(TestRepositoryConfig.class)
 class TagRepositoryTest {
     private static final String TAG_TITLE_1 = "Тег1";
     private static final String TAG_TITLE_2 = "Тег2";

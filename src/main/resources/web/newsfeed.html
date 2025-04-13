@@ -16,7 +16,7 @@
 </head>
 
 <body>
-<div th:replace="~{/fragments/header :: header}"></div>
+<div th:replace="~{fragments/header :: header}"></div>
 
 <main>
     <!-- Список постов на странице -->
@@ -26,7 +26,7 @@
             <div class="post"
                  th:if="${posts != null}"
                  th:each="post : ${posts}"
-                 th:include="~{/fragments/newsfeed-post :: post(${post})}"
+                 th:include="~{fragments/newsfeed-post :: post(${post})}"
             >
             </div>
         </div>
@@ -67,7 +67,7 @@
     <div th:replace="~{fragments/post-modal :: post-form(${post}, @{/posts}, 'Добавить пост')}"></div>
 </div>
 
-<div th:replace="~{/fragments/footer :: footer}"></div>
+<div th:replace="~{fragments/footer :: footer}"></div>
 
 </body>
 </html>

@@ -3,12 +3,12 @@ package ru.practicum.repository.post;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.context.annotation.Import;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
-import org.springframework.test.context.web.WebAppConfiguration;
-import ru.practicum.config.DataSourceConfig;
-import ru.practicum.config.WebConfig;
+import ru.practicum.config.TestRepositoryConfig;
 import ru.practicum.dao.post.PostDao;
 import ru.practicum.exception.post.PostNotFoundException;
 
@@ -21,9 +21,10 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringJUnitConfig(classes = {DataSourceConfig.class, WebConfig.class})
-@TestPropertySource(locations = "classpath:application-test.properties")
-@WebAppConfiguration
+@DataJdbcTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@TestPropertySource(locations="classpath:application-test.properties")
+@Import(TestRepositoryConfig.class)
 class PostRepositoryTest {
     private static final String POST_TITLE_1 = "Название поста1";
     private static final String POST_TITLE_2 = "Название поста2";

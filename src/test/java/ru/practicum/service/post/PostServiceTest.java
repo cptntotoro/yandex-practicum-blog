@@ -6,7 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.ContextConfiguration;
 import ru.practicum.mapper.post.PostDaoMapper;
 import ru.practicum.model.post.Post;
 import ru.practicum.model.post.PostPreview;
@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-@TestPropertySource(locations = "classpath:application-test.properties")
+@ContextConfiguration
 class PostServiceTest {
     private static final String POST_TITLE = "Заголовок";
     private static final String POST_CONTENT = "Контент";

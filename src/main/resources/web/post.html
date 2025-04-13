@@ -19,7 +19,7 @@
 </head>
 
 <body>
-<div th:replace="~{/fragments/header :: header}"></div>
+<div th:replace="~{fragments/header :: header}"></div>
 
 <main>
     <article class="post" th:value="${post.uuid}">
@@ -71,7 +71,7 @@
     <div th:replace="~{fragments/post-modal :: post-form(${post}, @{/posts/{uuid}(uuid=${post.uuid})}, 'Редактировать пост')}"></div>
 </div>
 
-<div th:replace="~{/fragments/footer :: footer}"></div>
+<div th:replace="~{fragments/footer :: footer}"></div>
 
 </body>
 </html>

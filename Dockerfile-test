@@ -1,20 +1,29 @@
-FROM maven:3.9-eclipse-temurin-21
+# Используем образ с Gradle и JDK 21
+FROM gradle:8.6-jdk21
 
-# Установка postgresql-client и проверка формата скрипта
+# Устанавливаем postgresql-client для проверки доступности БД
 RUN apt-get update && \
-    apt-get install -y postgresql-client dos2unix && \
+    apt-get install -y postgresql-client && \
     rm -rf /var/lib/apt/lists/*
 
+# Рабочая директория
 WORKDIR /app
 
-COPY pom.xml .
-RUN mvn dependency:go-offline -B
-
+# Копируем ВСЕ исходные файлы (и main и test)
+COPY build.gradle .
 COPY src ./src
+COPY wait-for-db.sh /wait-for-db.sh
 
-# Копирование и преобразование формата строк
-COPY scripts/wait-for-db.sh /usr/local/bin/wait-for-db
-RUN dos2unix /usr/local/bin/wait-for-db && \
-    chmod +x /usr/local/bin/wait-for-db
+# Устанавливаем права на скрипт и исправляем формат строк
+RUN chmod +x /wait-for-db.sh && \
+    sed -i 's/\r$//' /wait-for-db.sh
 
-CMD ["sh", "-c", "wait-for-db test_db 5432 mvn test"]
+# Тестовые переменные окружения
+ENV SPRING_PROFILES_ACTIVE=test \
+    GRADLE_OPTS="-Dorg.gradle.daemon=false -Dorg.gradle.caching=true"
+
+# Кэшируем зависимости и компилируем проект
+RUN gradle compileJava compileTestJava --no-daemon
+
+# Команда запуска тестов
+CMD ["/wait-for-db.sh", "test_db", "gradle", "test"]

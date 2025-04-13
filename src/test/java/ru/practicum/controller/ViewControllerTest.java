@@ -2,12 +2,16 @@ package ru.practicum.controller;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import ru.practicum.config.SecurityTestConfig;
+import ru.practicum.config.TestRepositoryConfig;
 import ru.practicum.dto.comment.CommentAddDto;
 import ru.practicum.model.post.Post;
 import ru.practicum.model.tag.Tag;
@@ -25,7 +29,12 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
+@ContextConfiguration(classes = {TestRepositoryConfig.class, SecurityTestConfig.class})
+@TestPropertySource(locations="classpath:application-test.properties")
+//@Import(SecurityTestConfig.class)
+@ActiveProfiles("test")
+@AutoConfigureMockMvc
 class ViewControllerTest {
     private static final String POSTS_URL = "/posts";
     private static final String COMMENTS_URL = "/comments";
@@ -37,22 +46,22 @@ class ViewControllerTest {
     private static final String IMAGE_URL = "http://example.com/image.jpg";
     private static final String TEST_COMMENT = "Test comment";
 
+    @Autowired
     private MockMvc mockMvc;
     private UUID postUuid;
     private Post post;
 
-    @Mock
+    @MockBean
     private PostService postService;
-    @Mock
+
+    @MockBean
     private CommentService commentService;
-    @Mock
+
+    @MockBean
     private TagService tagService;
-    @InjectMocks
-    private ViewController viewController;
 
     @BeforeEach
     void setUp() throws MalformedURLException {
-        mockMvc = MockMvcBuilders.standaloneSetup(viewController).build();
         postUuid = UUID.randomUUID();
         post = new Post.Builder()
                 .title(TEST_TITLE)

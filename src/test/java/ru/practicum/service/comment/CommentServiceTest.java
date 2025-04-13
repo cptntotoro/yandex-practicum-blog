@@ -5,7 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.ContextConfiguration;
 import ru.practicum.dao.comment.CommentDao;
 import ru.practicum.exception.comment.InvalidCommentException;
 import ru.practicum.exception.post.PostNotFoundException;
@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-@TestPropertySource(locations = "classpath:application-test.properties")
+@ContextConfiguration
 class CommentServiceTest {
     private static final String COMMENT_TEXT = "Текст комментария";
     private static final String COMMENT_1 = "Comment 1";

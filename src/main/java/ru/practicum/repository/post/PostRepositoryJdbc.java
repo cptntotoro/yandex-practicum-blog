@@ -25,10 +25,10 @@ import java.util.*;
  */
 @Repository
 public class PostRepositoryJdbc implements PostRepository {
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+    public PostRepositoryJdbc(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
@@ -175,7 +175,7 @@ public class PostRepositoryJdbc implements PostRepository {
                 postUuid
         );
 
-        return postCount != null && postCount > 0;
+        return postCount > 0;
     }
 
     private static final RowMapper<PostDao> POST_ROW_MAPPER = (rs, rowNum) -> {

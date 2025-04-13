@@ -1,0 +1,77 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.2.5'
+    id 'io.spring.dependency-management' version '1.1.4'
+}
+
+group = 'ru.practicum'
+version = '1.0-SNAPSHOT'
+
+java {
+    sourceCompatibility = '21'
+}
+
+repositories {
+    mavenCentral()
+    maven { url 'https://repo.spring.io/snapshot' }
+    maven { url 'https://repo.spring.io/milestone' }
+}
+
+dependencies {
+    // Основные Spring Boot стартеры
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // Security
+//    implementation 'org.springframework.security:spring-security-web'
+//    implementation 'org.springframework.security:spring-security-config'
+//    implementation 'org.springframework.security:spring-security-core'
+
+    // База данных
+    runtimeOnly 'org.postgresql:postgresql'
+
+    // Jakarta
+    implementation 'jakarta.persistence:jakarta.persistence-api'
+    implementation 'jakarta.annotation:jakarta.annotation-api'
+
+    // Логирование
+    implementation 'ch.qos.logback:logback-classic'
+
+    // Тестирование
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.boot:spring-boot-testcontainers'
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation 'org.testcontainers:postgresql'
+//    testImplementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+}
+//
+//test {
+//    useJUnitPlatform()
+//    testLogging {
+//        events "passed", "skipped", "failed"
+//        showStandardStreams = true
+//    }
+//}
+
+bootJar {
+    archiveFileName = "app.jar" // Фиксированное имя файла для Docker
+    layered {
+        enabled = true // Оптимизация слоев для Docker
+    }
+}
+
+// Оптимизация тестов
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+        showStandardStreams = true
+    }
+    systemProperty "spring.profiles.active", "test"
+    systemProperty "spring.datasource.url", System.getProperty("spring.datasource.url", "jdbc:postgresql://test_db:5432/test_db")
+    systemProperty "spring.datasource.username", "postgres"
+    systemProperty "spring.datasource.password", "postgres"
+}

@@ -17,15 +17,6 @@ import java.time.LocalDateTime;
 @ControllerAdvice
 public class ControllerExceptionHandler {
 
-    @ExceptionHandler(Throwable.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public String exception(Throwable throwable, Model model) {
-        String reason = throwable.getMessage();
-        ApiError error = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR.toString(), reason, throwable.getMessage(), LocalDateTime.now());
-        model.addAttribute("error", error);
-        return "error";
-    }
-
     @ExceptionHandler(CommentNotFoundException.class)
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     public String exceptionNotFound(CommentNotFoundException e, Model model) {

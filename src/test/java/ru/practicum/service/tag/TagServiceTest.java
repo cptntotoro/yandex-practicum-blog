@@ -6,7 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.ContextConfiguration;
 import ru.practicum.dao.tag.TagDao;
 import ru.practicum.exception.tag.InvalidTagException;
 import ru.practicum.model.tag.Tag;
@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-@TestPropertySource(locations = "classpath:application-test.properties")
+@ContextConfiguration
 class TagServiceTest {
     private static final String TAG_TITLE = "Тег Один";
     private static final String INVALID_TAG_TITLE = "Тег 1";

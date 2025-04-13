@@ -1,24 +1,28 @@
 # Этап сборки
-FROM maven:3.9-eclipse-temurin-21 AS build
+FROM gradle:8.6-jdk21 AS build
 
 WORKDIR /app
-COPY pom.xml .
-RUN mvn dependency:go-offline -B
-
+COPY build.gradle ./
 COPY src ./src
-RUN mvn package -DskipTests
+
+# Кэширование зависимостей
+RUN gradle dependencies --no-daemon
+
+# Сборка
+RUN gradle bootJar -x test --no-daemon
 
 # Этап запуска
-FROM tomcat:10.1-jdk21-temurin
+FROM eclipse-temurin:21-jre-jammy
 
-RUN rm -rf /usr/local/tomcat/webapps/*
+WORKDIR /app
 
-# Копируем WAR с явным именем
-COPY --from=build /app/target/*.war /usr/local/tomcat/webapps/ROOT.war
+# Копируем только JAR из этапа сборки
+COPY --from=build /app/build/libs/app.jar ./app.jar
 
-# Добавляем healthcheck для Tomcat
-HEALTHCHECK --interval=30s --timeout=5s \
-  CMD curl -f http://localhost:8080/posts/actuator/health || exit 1
+# Оптимизация для Spring Boot
+ENV SPRING_PROFILES_ACTIVE=prod \
+    SPRING_OUTPUT_ANSI_ENABLED=ALWAYS \
+    JAVA_OPTS="-XX:+UseContainerSupport -XX:MaxRAMPercentage=75"
 
 EXPOSE 8080
-CMD ["catalina.sh", "run"]
+ENTRYPOINT ["sh", "-c", "java ${JAVA_OPTS} -jar app.jar"]

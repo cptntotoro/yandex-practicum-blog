@@ -2,13 +2,17 @@ package ru.practicum.controller;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import ru.practicum.config.SecurityTestConfig;
+import ru.practicum.config.TestRepositoryConfig;
 import ru.practicum.service.comment.CommentService;
 import ru.practicum.service.post.PostService;
 
@@ -18,27 +22,32 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
+@ContextConfiguration(classes = {TestRepositoryConfig.class, SecurityTestConfig.class})
+@TestPropertySource(locations="classpath:application-test.properties")
+//@Import(SecurityTestConfig.class)
+@ActiveProfiles("test")
+@AutoConfigureMockMvc
 class PostRestControllerTest {
     private static final String POSTS_URL = "/posts";
     private static final String COMMENTS_URL = "/comments";
     private static final String LIKE_URL = "/like";
     private static final String INVALID_UUID = "invalid-uuid";
 
+    @Autowired
     private MockMvc mockMvc;
+
+    @MockBean
+    private PostService postService;
+
+    @MockBean
+    private CommentService commentService;
+
     private UUID postUuid;
     private UUID commentUuid;
 
-    @Mock
-    private PostService postService;
-    @Mock
-    private CommentService commentService;
-    @InjectMocks
-    private PostRestController postRestController;
-
     @BeforeEach
     void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(postRestController).build();
         postUuid = UUID.randomUUID();
         commentUuid = UUID.randomUUID();
     }

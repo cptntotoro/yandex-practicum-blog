@@ -1,5 +1,5 @@
 # Приложение "Блог"
-Java 21, Spring Servlet, PostgreSQL, Maven, Docker, Thymeleaf, HTML, CSS, JavaScript
+Java 21, Spring Boot, PostgreSQL, Gradle, Docker, Thymeleaf, HTML, CSS, JavaScript
 
 ## О проекте
 Приложение-сервлет, предоставляющее ленту постов, просмотр постов, а также интерфейсы создания и редактирования постов, 

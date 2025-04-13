@@ -1,8 +1,8 @@
 package ru.practicum.controller;
 
+import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.comment.CommentUpdateDto;
 import ru.practicum.mapper.comment.CommentMapper;
 import ru.practicum.service.comment.CommentService;
@@ -13,7 +13,6 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/posts")
 public class PostRestController {
-
     /**
      * Сервис управления постами
      */
