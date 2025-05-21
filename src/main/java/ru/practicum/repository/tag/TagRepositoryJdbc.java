@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
 import ru.practicum.dao.tag.TagDao;
 import ru.practicum.exception.tag.TagNotFoundException;
@@ -131,7 +132,7 @@ public class TagRepositoryJdbc implements TagRepository {
     public void batchUpdatePostTags(UUID postUuid, List<UUID> postTagUuids) {
         jdbcTemplate.batchUpdate(sqlSavePostTags, new BatchPreparedStatementSetter() {
             @Override
-            public void setValues(PreparedStatement ps, int i) throws SQLException {
+            public void setValues(@NonNull PreparedStatement ps, int i) throws SQLException {
                 ps.setObject(1, UUID.randomUUID());
                 ps.setObject(2, postUuid);
                 ps.setObject(3, postTagUuids.get(i));

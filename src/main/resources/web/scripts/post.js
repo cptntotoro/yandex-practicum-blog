@@ -1,7 +1,6 @@
 let likeButton;
 
 document.addEventListener("DOMContentLoaded", () => {
-    console.log("DOM fully loaded and parsed");
     likeButton = document.querySelector(".like-btn");
     headerButton = document.querySelector(".header__btn");
     headerButton.textContent = "Назад к ленте";

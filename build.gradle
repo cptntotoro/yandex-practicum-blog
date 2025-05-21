@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.2.5'
+    id 'org.springframework.boot' version '3.4.5'
     id 'io.spring.dependency-management' version '1.1.4'
 }
 
@@ -25,11 +25,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-    // Security
-//    implementation 'org.springframework.security:spring-security-web'
-//    implementation 'org.springframework.security:spring-security-config'
-//    implementation 'org.springframework.security:spring-security-core'
-
     // База данных
     runtimeOnly 'org.postgresql:postgresql'
 
@@ -45,16 +40,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-testcontainers'
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testImplementation 'org.testcontainers:postgresql'
-//    testImplementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
 }
-//
-//test {
-//    useJUnitPlatform()
-//    testLogging {
-//        events "passed", "skipped", "failed"
-//        showStandardStreams = true
-//    }
-//}
 
 bootJar {
     archiveFileName = "app.jar" // Фиксированное имя файла для Docker

@@ -9,7 +9,6 @@ let tagCheckboxes;
 let editPostButton;
 
 document.addEventListener("DOMContentLoaded", () => {
-
     modalOverlay = document.getElementById('modalOverlay');
     closeModalButton = document.getElementById('closeModalButton');
 
