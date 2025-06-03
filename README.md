@@ -3,8 +3,6 @@
 
 ![Static Badge](https://img.shields.io/coveralls/github/badges/shields)
 
-![Static Badge](https://img.shields.io/github/followers/cptntotoro?label=follow&style=social)
-
 # Приложение "Блог"
 Java 21, Spring Boot, PostgreSQL, Gradle, Docker, Thymeleaf, HTML, CSS, JavaScript
 
