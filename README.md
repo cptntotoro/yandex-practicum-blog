@@ -1,4 +1,9 @@
+
 [![Static Badge](https://img.shields.io/badge/реализация-на_чистом_Spring-238636?logo=spring)](https://github.com/cptntotoro/spring-servlet-blog)
+
+![Static Badge](https://img.shields.io/coveralls/github/badges/shields)
+
+![Static Badge](https://img.shields.io/github/followers/cptntotoro?label=follow&style=social)
 
 # Приложение "Блог"
 Java 21, Spring Boot, PostgreSQL, Gradle, Docker, Thymeleaf, HTML, CSS, JavaScript
