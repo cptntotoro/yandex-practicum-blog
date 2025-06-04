@@ -28,8 +28,6 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-        volumes:
-          - ./src/test/resources/test-schema.sql:/docker-entrypoint-initdb.d/test-schema.sql
 
     runs-on: ubuntu-latest
 
@@ -44,7 +42,11 @@ jobs:
         cache: maven
 
     - name: Wait for PostgreSQL to be ready
-      run: sleep 10
+      run: |
+        for i in {1..10}; do
+          nc -z localhost 5432 && break
+          sleep 2
+        done
       
     - name: Build with Maven
       run: mvn -B package --file pom.xml
