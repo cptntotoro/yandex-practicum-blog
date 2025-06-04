@@ -1,0 +1,60 @@
+# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
+
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: Java CI with Maven
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        volumes:
+          - ./src/test/resources/test-schema.sql:/docker-entrypoint-initdb.d/test-schema.sql
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+        cache: maven
+
+    - name: Wait for PostgreSQL to be ready
+      run: sleep 10
+      
+    - name: Build with Maven
+      run: mvn -B package --file pom.xml
+      env:
+        TEST_DATASOURCE_URL: jdbc:postgresql://localhost:5432/test_db
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: postgres
+        SPRING_SQL_INIT_MODE: always
+        SPRING_SQL_INIT_SCHEMA_LOCATIONS: classpath:test-schema.sql
+        SPRING_PROFILES_ACTIVE: test
+      
+    - name: Send coverage report to Coveralls
+      run: mvn coveralls:report
