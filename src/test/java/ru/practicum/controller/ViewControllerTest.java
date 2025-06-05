@@ -32,7 +32,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @ContextConfiguration(classes = {TestRepositoryConfig.class, SecurityTestConfig.class})
 @TestPropertySource(locations="classpath:application-test.properties")
-//@Import(SecurityTestConfig.class)
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
 class ViewControllerTest {

@@ -12,6 +12,9 @@ import java.util.UUID;
  * Полный пост
  */
 public class Post extends BasePost {
+    /**
+     * Содержание поста
+     */
     private final String content;
 
     private Post(UUID uuid, String title, URL imageUrl, String content, List<Tag> tags, Integer likesCounter, List<Comment> comments, LocalDateTime dateTime) {

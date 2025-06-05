@@ -44,6 +44,7 @@ public class TagDao {
 
         /**
          * Установить идентификатор
+         *
          * @param uuid Идентификатор
          */
         public Builder uuid(UUID uuid) {
@@ -53,6 +54,7 @@ public class TagDao {
 
         /**
          * Установить название
+         *
          * @param title название
          */
         public Builder title(String title) {

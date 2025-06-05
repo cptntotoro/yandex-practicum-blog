@@ -13,12 +13,33 @@ import java.util.UUID;
  * Базовый класс для постов
  */
 public abstract class BasePost {
+    /**
+     * Идентификатор
+     */
     private UUID uuid;
+    /**
+     * Название
+     */
     private String title;
+    /**
+     * URL картинки
+     */
     private URL imageUrl;
+    /**
+     * Теги
+     */
     private List<Tag> tags = new ArrayList<>();
+    /**
+     * Счетчик лайков
+     */
     private Integer likesCounter;
+    /**
+     * Комментарии
+     */
     private List<Comment> comments = new ArrayList<>();
+    /**
+     * Дата и время создания
+     */
     private LocalDateTime dateTime;
 
     protected BasePost() {

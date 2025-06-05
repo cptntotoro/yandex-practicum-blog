@@ -29,40 +29,40 @@ public class CommentRepositoryJdbc implements CommentRepository {
     }
 
     private static final String sqlAddCommentToPostByUuid = """
-        WITH post_check AS (
-            SELECT 1 FROM posts WHERE post_uuid = ? LIMIT 1
-        )
-        INSERT INTO comments (post_uuid, text_content)
-        SELECT ?, ?
-        FROM post_check
-        WHERE EXISTS (SELECT 1 FROM post_check)
-    """;
+                WITH post_check AS (
+                    SELECT 1 FROM posts WHERE post_uuid = ? LIMIT 1
+                )
+                INSERT INTO comments (post_uuid, text_content)
+                SELECT ?, ?
+                FROM post_check
+                WHERE EXISTS (SELECT 1 FROM post_check)
+            """;
 
     private static final String sqlUpdateCommentByUuid = """
-        UPDATE comments c
-        SET text_content = ?
-        FROM posts p
-        WHERE c.comment_uuid = ?
-        AND c.post_uuid = p.post_uuid
-    """;
+                UPDATE comments c
+                SET text_content = ?
+                FROM posts p
+                WHERE c.comment_uuid = ?
+                AND c.post_uuid = p.post_uuid
+            """;
 
     private static final String sqlGetCommentByUuid = """
-        SELECT *
-        FROM comments
-        WHERE comment_uuid = ?
-    """;
+                SELECT *
+                FROM comments
+                WHERE comment_uuid = ?
+            """;
 
     private static final String sqlGetAllCommentsByPostUuid = """
-        SELECT *
-        FROM comments
-        WHERE post_uuid = ?
-        ORDER BY date_time DESC
-    """;
+                SELECT *
+                FROM comments
+                WHERE post_uuid = ?
+                ORDER BY date_time DESC
+            """;
 
     private static final String sqlDeleteCommentByUuid = """
-        DELETE FROM comments
-        WHERE comment_uuid = ?
-    """;
+                DELETE FROM comments
+                WHERE comment_uuid = ?
+            """;
 
     @Override
     public UUID save(CommentDao comment) {

@@ -9,8 +9,17 @@ import java.util.UUID;
  * Полный комментарий
  */
 public class CommentViewDto {
+    /**
+     * Идентификатор
+     */
     private UUID uuid;
+    /**
+     * Содержание комментария
+     */
     private String content;
+    /**
+     * Дата и время создания комментария
+     */
     @DateTimeFormat(pattern = "dd-MMM-YYYY HH:mm")
     private LocalDateTime dateTime;
 

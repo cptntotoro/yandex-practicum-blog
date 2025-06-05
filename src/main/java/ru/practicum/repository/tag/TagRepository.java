@@ -13,12 +13,14 @@ public interface TagRepository extends BaseRepository<TagDao> {
 
     /**
      * Удалить все теги по идентификатору поста
+     *
      * @param postUuid Идентификатор поста
      */
     void deleteAllBy(UUID postUuid);
 
     /**
      * Получить все теги
+     *
      * @return Список тегов
      */
     List<TagDao> getAll();

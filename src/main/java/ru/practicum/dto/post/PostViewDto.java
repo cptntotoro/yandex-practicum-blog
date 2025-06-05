@@ -11,7 +11,13 @@ import java.util.UUID;
  * DTO полного поста в отдельной странице
  */
 public class PostViewDto extends PostBaseOutDto<TagViewDto> {
+    /**
+     * Счетчик лайков
+     */
     private final Integer likesCounter;
+    /**
+     * Комментарии
+     */
     private final List<CommentViewDto> comments;
 
     public PostViewDto(UUID uuid, String title, URL imageUrl, String content,

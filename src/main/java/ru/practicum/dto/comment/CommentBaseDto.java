@@ -4,6 +4,9 @@ package ru.practicum.dto.comment;
  * Базовое DTO для комментариев
  */
 public abstract class CommentBaseDto {
+    /**
+     * Содержание комментария
+     */
     protected String content;
 
     protected CommentBaseDto() {

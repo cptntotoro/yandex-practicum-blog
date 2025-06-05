@@ -6,6 +6,7 @@ public interface BaseService<T> {
 
     /**
      * Сохранить сущность
+     *
      * @param t Сущность
      * @return Сущность
      */
@@ -13,6 +14,7 @@ public interface BaseService<T> {
 
     /**
      * Удалить сущность по идентификатору
+     *
      * @param uuid Идентификатор
      */
     void delete(UUID uuid);

@@ -27,13 +27,15 @@ public interface TagService extends BaseService<Tag> {
 
     /**
      * Удалить все теги по идентификатору поста
+     *
      * @param postUuid Идентификатор поста
      */
     void deleteAllBy(UUID postUuid);
 
     /**
      * Обновить теги поста
-     * @param postUuid Идентификатор поста
+     *
+     * @param postUuid     Идентификатор поста
      * @param postTagUuids Список идентификаторов поста
      */
     void batchUpdatePostTags(UUID postUuid, List<UUID> postTagUuids);

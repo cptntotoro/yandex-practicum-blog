@@ -47,6 +47,7 @@ public class PostDaoMapper {
 
     /**
      * Смаппить список постов для БД в список превью постов
+     *
      * @param postDaoList Список постов для БД
      * @return Список превью постов
      */
@@ -58,6 +59,7 @@ public class PostDaoMapper {
 
     /**
      * Смаппить пост для БД в превью поста
+     *
      * @param postDao Пост для БД
      * @return Превью поста
      */

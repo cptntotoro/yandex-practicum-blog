@@ -30,48 +30,48 @@ public class TagRepositoryJdbc implements TagRepository {
     }
 
     private static final String sqlGetTagByUuid = """
-        SELECT *
-        FROM tags
-        WHERE tag_uuid = ?
-    """;
+                SELECT *
+                FROM tags
+                WHERE tag_uuid = ?
+            """;
 
     private static final String sqlSaveTag = """
-        INSERT INTO tags (title)
-        VALUES (?)
-    """;
+                INSERT INTO tags (title)
+                VALUES (?)
+            """;
 
     private static final String sqlUpdateTagByUuid = """
-        UPDATE tags
-        SET title = ?
-        WHERE tag_uuid = ?
-    """;
+                UPDATE tags
+                SET title = ?
+                WHERE tag_uuid = ?
+            """;
 
     private static final String sqlDeleteTagByUuid = """
-        DELETE FROM tags
-        WHERE tag_uuid = ?
-    """;
+                DELETE FROM tags
+                WHERE tag_uuid = ?
+            """;
 
     private static final String sqlGetAllTags = """
-        SELECT *
-        FROM tags
-    """;
+                SELECT *
+                FROM tags
+            """;
 
     private static final String sqlGetAllByPostUuid = """
-        SELECT t.*
-        FROM post_tags pt
-        JOIN tags t ON pt.tag_uuid = t.tag_uuid
-        WHERE pt.post_uuid = ?
-    """;
+                SELECT t.*
+                FROM post_tags pt
+                JOIN tags t ON pt.tag_uuid = t.tag_uuid
+                WHERE pt.post_uuid = ?
+            """;
 
     private static final String sqlDeleteAllByPostUuid = """
-        DELETE FROM post_tags
-        WHERE post_uuid = ?
-    """;
+                DELETE FROM post_tags
+                WHERE post_uuid = ?
+            """;
 
     private static final String sqlSavePostTags = """
-        INSERT INTO post_tags (pt_uuid, post_uuid, tag_uuid)
-        VALUES (?, ?, ?)
-    """;
+                INSERT INTO post_tags (pt_uuid, post_uuid, tag_uuid)
+                VALUES (?, ?, ?)
+            """;
 
     @Override
     public TagDao get(UUID uuid) {

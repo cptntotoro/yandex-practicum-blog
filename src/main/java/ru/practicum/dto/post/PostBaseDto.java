@@ -8,9 +8,21 @@ import java.util.List;
  * Абстрактное базовое DTO постов
  */
 public abstract class PostBaseDto<T> {
+    /**
+     * Название
+     */
     protected String title;
+    /**
+     * URL картинки
+     */
     protected URL imageUrl;
+    /**
+     * Содержание поста
+     */
     protected String content;
+    /**
+     * Теги
+     */
     protected List<T> tags = new ArrayList<>();
 
     protected PostBaseDto() {

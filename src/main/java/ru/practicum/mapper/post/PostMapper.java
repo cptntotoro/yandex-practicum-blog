@@ -74,6 +74,7 @@ public class PostMapper {
 
     /**
      * Смаппить список постов в список DTO постов
+     *
      * @param postList Список постов
      * @return Список DTO постов
      */
@@ -85,7 +86,8 @@ public class PostMapper {
 
     /**
      * Смаппить пост для обновления в пост
-     * @param postUuid Идентификатор поста
+     *
+     * @param postUuid      Идентификатор поста
      * @param postUpdateDto Пост для обновления
      * @return Пост
      */

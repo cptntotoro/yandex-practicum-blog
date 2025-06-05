@@ -90,6 +90,7 @@ public class PostDao {
 
         /**
          * Установить идентификатор
+         *
          * @param uuid идентификатор
          */
         public Builder uuid(UUID uuid) {
@@ -99,6 +100,7 @@ public class PostDao {
 
         /**
          * Установить название
+         *
          * @param title название
          */
         public Builder title(String title) {
@@ -108,6 +110,7 @@ public class PostDao {
 
         /**
          * Установить URL картинки
+         *
          * @param imageUrl URL картинки
          */
         public Builder imageUrl(URL imageUrl) {
@@ -117,6 +120,7 @@ public class PostDao {
 
         /**
          * Установить содержание
+         *
          * @param content содержание
          */
         public Builder content(String content) {
@@ -126,6 +130,7 @@ public class PostDao {
 
         /**
          * Установить краткое содержание
+         *
          * @param preview Краткое содержание
          */
         public Builder preview(String preview) {
@@ -135,6 +140,7 @@ public class PostDao {
 
         /**
          * Установить счетчик лайков
+         *
          * @param likesCounter счетчик лайков
          */
         public Builder likesCounter(Integer likesCounter) {
@@ -144,6 +150,7 @@ public class PostDao {
 
         /**
          * Установить дату и время создания
+         *
          * @param dateTime Дата и время создания
          */
         public Builder dateTime(LocalDateTime dateTime) {

@@ -15,6 +15,7 @@ public class CommentMapper {
 
     /**
      * Смаппить DTO комментарий
+     *
      * @param comment Комментарий
      * @return DTO комментарий
      */
@@ -28,6 +29,7 @@ public class CommentMapper {
 
     /**
      * Смаппить список DTO комментариев
+     *
      * @param comments Список комментариев
      * @return Список DTO комментариев
      */
@@ -39,7 +41,8 @@ public class CommentMapper {
 
     /**
      * Смаппить комментарий для добавления в комментарий
-     * @param postUuid Идентификатор поста
+     *
+     * @param postUuid      Идентификатор поста
      * @param commentAddDto Комментарий для добавления
      * @return Комментарий
      */
@@ -52,8 +55,9 @@ public class CommentMapper {
 
     /**
      * Смаппить комментарий для добавления в комментарий
-     * @param postUuid Идентификатор поста
-     * @param commentUuid Идентификатор комментария
+     *
+     * @param postUuid         Идентификатор поста
+     * @param commentUuid      Идентификатор комментария
      * @param commentUpdateDto Комментарий для обновления
      * @return Комментарий
      */

@@ -12,6 +12,9 @@ import java.util.UUID;
  * Превью поста
  */
 public class PostPreview extends BasePost {
+    /**
+     * Краткое содержание поста
+     */
     private final String preview;
 
     private PostPreview(UUID uuid, String title, URL imageUrl, String preview, List<Tag> tags, Integer likesCounter, List<Comment> comments, LocalDateTime dateTime) {

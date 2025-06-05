@@ -62,6 +62,7 @@ public class Comment {
 
         /**
          * Установить идентификатор
+         *
          * @param uuid идентификатор
          */
         public Builder uuid(UUID uuid) {
@@ -71,6 +72,7 @@ public class Comment {
 
         /**
          * Установить идентификатор поста
+         *
          * @param postUuid идентификатор поста
          */
         public Builder postUuid(UUID postUuid) {
@@ -80,6 +82,7 @@ public class Comment {
 
         /**
          * Установить содержание комментария
+         *
          * @param content содержание комментария
          */
         public Builder content(String content) {
@@ -89,6 +92,7 @@ public class Comment {
 
         /**
          * Установить дату и время создания
+         *
          * @param dateTime Дата и время создания
          */
         public Builder dateTime(LocalDateTime dateTime) {

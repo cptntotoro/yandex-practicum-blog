@@ -40,8 +40,10 @@ class PostServiceTest {
 
     @Mock
     private PostRepository postRepository;
+
     @Mock
     private TagService tagService;
+
     @Mock
     private CommentService commentService;
 

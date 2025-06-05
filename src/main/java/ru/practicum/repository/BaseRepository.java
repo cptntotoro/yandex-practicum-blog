@@ -6,6 +6,7 @@ import java.util.UUID;
 public interface BaseRepository<T> {
     /**
      * Получить сущность по идентификатору
+     *
      * @param uuid Идентификатор
      * @return Сущность
      */
@@ -13,6 +14,7 @@ public interface BaseRepository<T> {
 
     /**
      * Сохранить сущность
+     *
      * @param t Сущность
      * @return Сущность
      */
@@ -20,18 +22,21 @@ public interface BaseRepository<T> {
 
     /**
      * Обновить сущность
+     *
      * @param t Сущность
      */
     void update(T t);
 
     /**
      * Удалить сущность по идентификатору
+     *
      * @param uuid Идентификатор
      */
     void deleteBy(UUID uuid);
 
     /**
      * Получить все сущности по идентификатору другой сущности
+     *
      * @param uuid Идентификатор сущности
      * @return Список сущностей
      */

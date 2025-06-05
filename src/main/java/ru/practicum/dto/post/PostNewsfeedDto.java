@@ -10,9 +10,21 @@ import java.util.UUID;
  * DTO поста для ленты постов (без content)
  */
 public class PostNewsfeedDto extends PostBasePreviewDto<Tag> {
+    /**
+     * Идентификтор
+     */
     private final UUID uuid;
+    /**
+     * Счетчик комментариев
+     */
     private final Integer commentsCounter;
+    /**
+     * Счетчик лайков
+     */
     private final Integer likesCounter;
+    /**
+     * Краткое содержание поста
+     */
     private final String preview;
 
     public PostNewsfeedDto(UUID uuid, String title, URL imageUrl, List<Tag> tags,

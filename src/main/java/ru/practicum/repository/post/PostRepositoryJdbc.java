@@ -33,56 +33,56 @@ public class PostRepositoryJdbc implements PostRepository {
     }
 
     private static final String sqlGetPostByUuid = """
-        SELECT *
-        FROM posts
-        WHERE post_uuid = ?
-    """;
+                SELECT *
+                FROM posts
+                WHERE post_uuid = ?
+            """;
 
     private static final String sqlGetAllPostsPage = """
-        SELECT rs.*
-        FROM (select p.*, row_number() over (ORDER BY date_time DESC) as row_num
-            FROM posts p) rs
-        WHERE rs.row_num >= ? and rs.row_num  < ?
-        ORDER BY rs.row_num
-    """;
+                SELECT rs.*
+                FROM (select p.*, row_number() over (ORDER BY date_time DESC) as row_num
+                    FROM posts p) rs
+                WHERE rs.row_num >= ? and rs.row_num  < ?
+                ORDER BY rs.row_num
+            """;
 
     private static final String sqlGetAllPostsByTag = """
-        SELECT *
-        FROM posts p
-        JOIN post_tags pt ON p.post_uuid = pt.post_uuid
-        WHERE pt.tag_uuid = ?
-        ORDER BY date_time
-    """;
+                SELECT *
+                FROM posts p
+                JOIN post_tags pt ON p.post_uuid = pt.post_uuid
+                WHERE pt.tag_uuid = ?
+                ORDER BY date_time
+            """;
 
     private static final String sqlSavePost = """
-        INSERT INTO posts (title, image_url, text_content)
-        VALUES (?, ?, ?)
-    """;
+                INSERT INTO posts (title, image_url, text_content)
+                VALUES (?, ?, ?)
+            """;
 
     private static final String sqlDeletePostByUuid = """
-        DELETE FROM posts
-        WHERE post_uuid = ?
-    """;
+                DELETE FROM posts
+                WHERE post_uuid = ?
+            """;
 
     private static final String sqlUpdatePostByUuid = """
-        UPDATE posts
-        SET title = ?, image_url = ?, text_content = ?
-        WHERE post_uuid = ?
-    """;
+                UPDATE posts
+                SET title = ?, image_url = ?, text_content = ?
+                WHERE post_uuid = ?
+            """;
 
     private static final String sqlSetLikeByPostUuid = """
-        UPDATE posts
-        SET likes = likes + 1
-        WHERE post_uuid = ?
-    """;
+                UPDATE posts
+                SET likes = likes + 1
+                WHERE post_uuid = ?
+            """;
 
     private static final String sqlGetTotal = """
-        SELECT COUNT(*) FROM posts
-    """;
+                SELECT COUNT(*) FROM posts
+            """;
 
     private static final String sqlCountPostByUuid = """
-        SELECT COUNT(*) FROM posts WHERE post_uuid = ?
-    """;
+                SELECT COUNT(*) FROM posts WHERE post_uuid = ?
+            """;
 
     @Override
     public PostDao get(UUID uuid) {

@@ -8,6 +8,9 @@ import java.util.UUID;
  * Абстрактное базовое отдаваемое DTO постов с UUID
  */
 public abstract class PostBaseOutDto<T> extends PostBaseDto<T> {
+    /**
+     * Идентификтор
+     */
     private UUID uuid;
 
     protected PostBaseOutDto() {

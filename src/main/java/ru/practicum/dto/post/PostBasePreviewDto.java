@@ -8,8 +8,17 @@ import java.util.List;
  * Базовый класс для постов без content
  */
 public abstract class PostBasePreviewDto<T> {
+    /**
+     * Название
+     */
     protected String title;
+    /**
+     * URL картинки
+     */
     protected URL imageUrl;
+    /**
+     * Теги
+     */
     protected List<T> tags = new ArrayList<>();
 
     protected PostBasePreviewDto() {

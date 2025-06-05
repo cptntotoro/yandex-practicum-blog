@@ -59,6 +59,7 @@ public class CommentDao {
 
         /**
          * Установить идентификатор
+         *
          * @param uuid идентификатор
          */
         public Builder uuid(UUID uuid) {
@@ -68,6 +69,7 @@ public class CommentDao {
 
         /**
          * Установить идентификатор поста
+         *
          * @param postUuid идентификатор поста
          */
         public Builder postUuid(UUID postUuid) {
@@ -77,6 +79,7 @@ public class CommentDao {
 
         /**
          * Установить содержание комментария
+         *
          * @param content содержание комментария
          */
         public Builder content(String content) {
@@ -86,6 +89,7 @@ public class CommentDao {
 
         /**
          * Установить дату и время создания
+         *
          * @param dateTime Дата и время создания
          */
         public Builder dateTime(LocalDateTime dateTime) {
